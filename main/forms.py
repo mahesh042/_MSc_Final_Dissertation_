@@ -2,8 +2,6 @@ from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth.models import User
 from .validators import validate_email,validate_username
 from django import forms
-
-
 class NewUserForm(UserCreationForm):
 	username = forms.CharField(max_length=100,validators=[validate_username],
                                required=True,
