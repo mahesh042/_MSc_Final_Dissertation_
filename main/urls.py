@@ -15,6 +15,6 @@ urlpatterns = [
     path('logout',views.logout_request, name='logout'),
     path("register", views.register_request, name="register"),
     path("password_reset", views.password_reset_request, name="password_reset"),
-    # path('resendOTP', views.resend_otp, name="resendOTP"),
+    path("contact", views.contact_us, name="contact"),
 
 ]

@@ -1,10 +1,9 @@
-import email
 from django.shortcuts import  render, redirect
-from .forms import NewUserForm
+from .forms import NewUserForm,AuthenticationForm
 from django.contrib.auth import login, authenticate,logout
 from django.conf import settings
 from django.views.decorators.csrf import csrf_protect
-from django.contrib.auth.forms import PasswordResetForm,AuthenticationForm
+from django.contrib.auth.forms import PasswordResetForm
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
 from django.contrib.auth.models import User
@@ -18,6 +17,7 @@ from .models import UserOTP
 from django.core.mail import send_mail
 from django.contrib import messages
 # Create your views here.
+
 @csrf_protect
 def homepage(request):
 	return render(request=request, template_name='main/home.html')
@@ -37,7 +37,6 @@ def register_request(request):
 			else:
 				messages.warning(request, f'You Entered a Wrong OTP')
 				return render(request, 'main/register.html', {'otp': True, 'usr': usr})
-
 		form = NewUserForm(request.POST)
 		if form.is_valid():
 			form.save()
@@ -50,50 +49,20 @@ def register_request(request):
 			usr.save()
 			usr_otp = random.randint(100000, 999999)
 			UserOTP.objects.create(user = usr, otp = usr_otp)
-
-			mess = f"Hello {usr.username},\nYour OTP is {usr_otp}\nThanks!"
-
+			message = f"Hello {usr.username}\n\nTo authenticate, please enter the following one time password:\n {usr_otp} \n Thanks!"
 			send_mail(
 				"Welcome to Bikers Hub - Verify Your Email",
-				mess,
+				message,
 				settings.EMAIL_HOST_USER,
 				[usr.email],
 				fail_silently = False
 				)
+			return render(request, 'main/register.html', {'otp': True, 'usr': usr})		
 
-			return render(request, 'main/register.html', {'otp': True, 'usr': usr})
-
-		
 	else:
 		form = NewUserForm()
-
 	return render(request, 'main/register.html', {'register_form':form})
 
-
-# def resend_otp(request):
-# 	if request.method == "GET":
-# 		get_usr = request.GET['usr']
-# 		if User.objects.filter(username = get_usr).exists() and User.objects.get(username = get_usr).is_activev==False:
-# 			usr = User.objects.get(username=get_usr)
-# 			usr_otp = random.randint(100000, 999999)
-# 			UserOTP.objects.create(user = usr, otp = usr_otp)
-# 			mess = f"Hello {usr.first_name},\nYour OTP is {usr_otp}\nThanks!"
-
-# 			send_mail(
-# 				"Welcome to ITScorer - Verify Your Email",
-# 				mess,
-# 				settings.EMAIL_HOST_USER,
-# 				[usr.email],
-# 				fail_silently = False
-# 				)
-# 			return HttpResponse("Resend")
-
-# 	return HttpResponse("Can't Send ")
-
-
-
-
-			
 
 @csrf_protect
 def signin_request(request):
@@ -150,3 +119,8 @@ def password_reset_request(request):
 					return redirect ("main:homepage")
 	password_reset_form = PasswordResetForm()
 	return render(request=request, template_name="main/password/password_reset.html", context={"password_reset_form":password_reset_form})
+
+
+@csrf_protect
+def contact_us(request):
+	return HttpResponse('Still on Development..............')
