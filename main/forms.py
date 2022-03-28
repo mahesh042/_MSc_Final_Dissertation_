@@ -25,12 +25,12 @@ class NewUserForm(UserCreationForm):
                                                                   'class': 'form-control',
                                                                   'data-toggle': 'password',
                                                                   'id': 'password',
+                                                                  'label':'Confirm Password',
                                                                   }))
 	class Meta:
         
 		model = User
 		fields = ['username', 'email', 'password1', 'password2']
-        
 	
 	def save(self, commit=True):
 		user = super(NewUserForm, self).save(commit=False)

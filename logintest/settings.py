@@ -33,7 +33,7 @@ ALLOWED_HOSTS = []
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'bikers.den.official@gmail.com'
-EMAIL_HOST_PASSWORD = 'Omen042!' #past the key or password app here
+EMAIL_HOST_PASSWORD = 'Omen042!' 
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'default from email'
@@ -42,7 +42,7 @@ DEFAULT_FROM_EMAIL = 'default from email'
 
 INSTALLED_APPS = [
     'main.apps.MainConfig',
-    "verify_email.apps.VerifyEmailConfig",
+    'verify_email.apps.VerifyEmailConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
-    'rest_framework',
     
 ]
 

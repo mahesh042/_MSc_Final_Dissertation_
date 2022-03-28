@@ -9,13 +9,6 @@
 <div class="container py-5" id="signupModal">
 <br>	
 	<h1>Register</h1>
-	{% if messages %}
-	{% for mess in messages %}
-	<div class="alert alert-{{mess.tags}}" role="alert">
-	  {{mess}}
-	</div>
-	{% endfor %}
-  	{% endif %}
 	{% if otp %}
 	<form method="POST"> {% csrf_token %}
 		<fieldset class="form-group">
@@ -39,7 +32,11 @@
 
 	{% else %}
 	<form method="POST"> {% csrf_token %}
-		{{ register_form|crispy }}
+		<div id="div_id_username" class="form-group"> <label for="id_username" class=" requiredField">Username<span class="asteriskField">*</span> </label> <div> <input type="text" name="username" placeholder="Username" class="form-control textinput textInput" maxlength="100" autofocus required id="id_username"> </div> </div> 
+		<div id="div_id_email" class="form-group"> <label for="id_email" class=" requiredField">Email<span class="asteriskField">*</span> </label> <div> <input type="text" name="email" placeholder="Email" class="form-control textinput textInput" required id="id_email"> </div> </div> 
+		<div id="div_id_password1" class="form-group"> <label for="password" class=" requiredField">Password<span class="asteriskField">*</span> </label> <div> <input type="password" name="password1" placeholder="Password1" class="form-control textinput textInput" data-toggle="password" id="password" maxlength="50" required> </div> </div> 
+		<div id="div_id_password2" class="form-group"> <label for="password" class=" requiredField">Confirm Password<span class="asteriskField">*</span> </label> <div> <input type="password" name="password2" placeholder="Password2" class="form-control textinput textInput" data-toggle="password" id="password" label="Confirm Password" maxlength="50" required> </div> </div>
+
 		<button class="btn btn-primary" type="submit">Register</button>
 	{% endif %}
 	</form>

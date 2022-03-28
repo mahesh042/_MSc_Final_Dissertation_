@@ -22,6 +22,7 @@ from django.contrib import messages
 def homepage(request):
 	return render(request=request, template_name='main/home.html')
 
+
 @csrf_protect
 def register_request(request):
 	if request.method == 'POST':
@@ -62,6 +63,7 @@ def register_request(request):
 	else:
 		form = NewUserForm()
 	return render(request, 'main/register.html', {'register_form':form})
+
 
 
 @csrf_protect
