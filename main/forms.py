@@ -58,3 +58,15 @@ class AuthenticationForm(AuthenticationForm):
 	class Meta:
 		model = User
 		fields = ['username', 'password']
+
+
+class ContactForm(forms.Form):
+    from_email = forms.EmailField(required=True,widget=forms.TextInput(attrs={'placeholder': 'Email',
+                                                           'class': 'form-control',
+                                                           }))
+    subject = forms.CharField(required=True,widget=forms.TextInput(attrs={'placeholder': 'Subject',
+                                                           'class': 'form-control',
+                                                           }))
+    message = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Type in your message',
+                                                           'class': 'form-control',
+                                                           }), required=True)

@@ -1,5 +1,5 @@
 from django.shortcuts import  render, redirect
-from .forms import NewUserForm,AuthenticationForm
+from .forms import NewUserForm,AuthenticationForm,ContactForm
 from django.contrib.auth import login, authenticate,logout
 from django.conf import settings
 from django.views.decorators.csrf import csrf_protect
@@ -12,7 +12,8 @@ from django.db.models.query_utils import Q
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
-import random
+import random, json
+from .models import DockStation
 from .models import UserOTP
 from django.core.mail import send_mail
 from django.contrib import messages
@@ -20,7 +21,10 @@ from django.contrib import messages
 
 @csrf_protect
 def homepage(request):
-	return render(request=request, template_name='main/home.html')
+    location_list = list(DockStation.objects.order_by('name').values()) 
+    location_json = json.dumps(location_list)  
+    context = {'locations': location_json} 
+    return render(request, 'main/home.html', context)
 
 
 @csrf_protect
@@ -125,4 +129,30 @@ def password_reset_request(request):
 
 @csrf_protect
 def contact_us(request):
-	return HttpResponse('Still on Development..............')
+	if request.method == 'GET':
+		form = ContactForm()
+	else:
+		form = ContactForm(request.POST)
+		if form.is_valid():
+			subject = "Contact form inquiry"
+			body={
+				'subject' : form.cleaned_data['subject'],
+				'from_email' : form.cleaned_data['from_email'],
+				'message' : form.cleaned_data['message'],
+			}
+			message = '\n'.join('='.join((key,val)) for (key,val) in body.items())
+			sender = form.cleaned_data['from_email']
+			recipient = ['bikers.den.official@gmail.com']
+			try:
+				send_mail(subject, message, sender,recipient,fail_silently=True)
+			except BadHeaderError:
+				return HttpResponse('Invalid header found.')
+			return redirect('main:success')
+	return render(request, "main/contact.html", {'form': form})
+
+
+def successView(request):
+    return render(request,'main/success.html')
+
+def bookings(request):
+	return render(request,'main/bookings.html')

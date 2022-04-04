@@ -1,0 +1,12 @@
+{% extends "main/home.html" %}
+{% csrf_token %}
+{% block content %} 
+{% load crispy_forms_tags %}    
+
+
+<div class="container py-5">
+    <h4>Success! Thank you for your message. Our team will be in touch with you shortly...</h4>
+
+</div>
+
+{%endblock%}

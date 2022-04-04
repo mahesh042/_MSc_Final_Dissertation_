@@ -42,7 +42,6 @@ DEFAULT_FROM_EMAIL = 'default from email'
 
 INSTALLED_APPS = [
     'main.apps.MainConfig',
-    'verify_email.apps.VerifyEmailConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -159,5 +158,8 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+GOOGLE_MAPS_API_KEY = 'AIzaSyB00JIYvI6CxXDMg-V71HrDFRIUZCgQ9dE'
 
-SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
+SECURE_SSL_REDIRECT=False
+SESSION_COOKIE_SECURE=False
+CSRF_COOKIE_SECURE=False

@@ -17,6 +17,6 @@ def validate_username(value):
         )
 
 
-# def validate_password(value):
-#     if User.objects.filter('password1') != User.objects.filter('password2'):
-#         raise ValidationError('Two Password Fields did not match. Try again')
+def validate_password(value):
+    if User.objects.filter('password1') != User.objects.filter('password2'):
+        raise ValidationError('Two Password Fields did not match. Try again')

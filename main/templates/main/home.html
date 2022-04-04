@@ -9,9 +9,35 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <title>Title</title>
+    <link rel='stylesheet' type='text/css' href='https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.4.0/maps/maps.css'>
+    <title>Biker's Den</title>
+    <style> 
+      #map { 
+        
+        height: 500px;
+        width: 500px;
+        border: 1px solid;
+        margin: 20px;
+        padding-left: 650px;
+        padding-right: 350px;
+      } 
+
+      .mapboxgl-marker { 
+          cursor: pointer; 
+      } 
+
+      .locator-popup { 
+          font-size: 14px; 
+      } 
+      h3 {
+        text-align: left;
+        padding-left: 20px;
+
+      }
+    </style> 
   </head>
  <body>
+
       {% include 'main/includes/messages.html' %}
 
     {% block content %}
@@ -20,15 +46,19 @@
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.4.0/maps/maps-web.min.js"></script>
       <script>
-        function respScreen() {
-            var x = document.getElementById("myTopnav");
-            if (x.className === "topnav") {
-                x.className += " responsive";
-            } else {
-                x.className = "topnav";
-            }
+        function respScreen() 
+        {
+          var x = document.getElementById("myTopnav");
+          if (x.className === "topnav") {
+            x.className += " responsive";
+          } else {
+            x.className = "topnav";
+          }
         }
+
+
       </script> 
 
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -40,11 +70,17 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item {% block contactactive %}  {% endblock contactactive %} ">
-              <a class="nav-link" href="/contact">Contact</a>
-            </li>            
-          </ul>
+              <a class="nav-link" href="/contact">Contact Us</a>
+            </li>     
+            {% if user.is_authenticated %}  
+            <li class="nav-item">
+              <a class="nav-link" href="/bookings">Booking History</a>
+            </li>  
+            {% endif %} 
+          </ul>   
         </div>
-          </div>
+
+         
           {% if user.is_authenticated %}
           <li class="nav-item">
             <a class="btn btn-outline-success m-2 my-sm-0" href="/logout">Logout as {{user.username}} </a>
@@ -56,6 +92,62 @@
           {% endif %}
         </div>
       </nav>
+      <br>
+      {% if user.is_authenticated %}
+      <!-- <h4>Welcome {{user.username}}</h4> -->
+      <h3>Places we are in!</h3> 
+      
+
+      <div id='map' class='map'></div> 
+      
+
+
+        
+      <script> 
+          // create the map 
+           tt.setProductInfo('TomTom Maps Django Demo', '1.0'); 
+          let map = tt.map({ 
+              key: 'nnGFDAG5fbU1G2flmGXlvJ84EEfVPGuC', 
+              container: 'map' 
+          }); 
+    
+          // add store markers 
+          let bounds = [] 
+          let storeLocations = JSON.parse("{{ locations|escapejs }}"); 
+    
+          for (let storeLocation of storeLocations) { 
+              let coordinates = [storeLocation.longitude, storeLocation.latitude]; 
+               bounds.push(coordinates); 
+    
+              // create popup to display store information when the marker is clicked 
+              let popup = new tt.Popup().setHTML(` 
+                  <div class="locator-popup"> 
+                      <h6>Station Name</h6> 
+                      <p>${storeLocation.name}</p> 
+                      <h6>Address</h6> 
+                      <p>${storeLocation.address}</p>
+                      <h6>PostCode</h6> 
+                      <p>${storeLocation.postcode}</p> 
+                  </div> 
+              `); 
+    
+              let marker = new tt.Marker() 
+                  .setLngLat(coordinates) 
+                  .setPopup(popup) 
+                  .addTo(map); 
+          } 
+    
+          // zoom the map to fit all markers 
+           map.on('load', () => { 
+               map.fitBounds(bounds, { 
+                  padding: { top: 150, bottom:150, left: 150, right: 150 } 
+              }); 
+          }) 
+      </script> 
+      {% else %}
+      <h3>Save the Earth!</h3>
+      <h3>Hire a bike</h3>
+      {% endif %}
     {%endblock%}
   </body>
 </html>

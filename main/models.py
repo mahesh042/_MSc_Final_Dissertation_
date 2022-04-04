@@ -7,11 +7,9 @@ class UserOTP(models.Model):
     otp = models.PositiveSmallIntegerField()
 
 
-class DockStations(models.Model):
-    station_id = models.IntegerField()
-    post_code = models.TextField()
-    docks = models.IntegerField()
-    pickup_docks = models.IntegerField()
-    dropoff_docks = models.IntegerField()
-    class Meta:
-        unique_together = ['post_code']
+class DockStation(models.Model): 
+   name = models.CharField(max_length=255)
+   address = models.CharField(max_length=200) 
+   postcode = models.CharField(max_length=10) 
+   latitude = models.FloatField() 
+   longitude = models.FloatField() 
