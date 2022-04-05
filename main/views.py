@@ -21,10 +21,10 @@ from django.contrib import messages
 
 @csrf_protect
 def homepage(request):
-    location_list = list(DockStation.objects.order_by('name').values()) 
-    location_json = json.dumps(location_list)  
-    context = {'locations': location_json} 
-    return render(request, 'main/home.html', context)
+	location_list = list(DockStation.objects.order_by('name').values()) 
+	location_json = json.dumps(location_list)  
+	context = {'locations': location_json} 
+	return render(request, 'main/home.html', context) 
 
 
 @csrf_protect

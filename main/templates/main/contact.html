@@ -2,7 +2,15 @@
 {% csrf_token %}
 {% block content %} 
 {% load crispy_forms_tags %}    
+<style> 
 
+    h1 {
+      text-align: left;
+      padding-top: 20px;
+      padding-left: 180px;
+
+    }
+  </style>
 <h1>Contact Us</h1>
 <div class="container py-5">
 <form method="post">{% csrf_token %}
