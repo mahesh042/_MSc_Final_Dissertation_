@@ -29,11 +29,29 @@
       .locator-popup { 
           font-size: 14px; 
       } 
-      h3 {
-        text-align: center;
-        padding-left: 20px;
 
+      body{
+        background-color: #fdf6f1;
       }
+
+      h4{
+        text-align: center;
+      }
+
+      .left-half {
+ 
+        float: left;
+        width: 50%;
+      }
+      .right-half {
+
+        float: left;
+        width: 50%;
+      }
+
+
+
+
     </style> 
   </head>
  <body>
@@ -98,10 +116,7 @@
       <h3>Places we are in!</h3> 
       
       <div id='map' class='map'></div> 
-      
-
-
-        
+  
       <script> 
           // create the map 
            tt.setProductInfo('TomTom Maps Django Demo', '1.0'); 
@@ -144,8 +159,29 @@
           }) 
       </script> 
       {% else %}
-      <h3>Save the Earth!</h3>
-      <h3>Hire a bike</h3>
+
+      <h4>Discover and share the joy of cycling</h4><br><br>
+      <section class="container">
+        <div class="left-half">
+          <article>
+
+            <br><br><h5>Welcome</h5><br>
+            <h5>Travel around Leicester healthily, sustainably and cheaply using the city’s smart bike share scheme, Bikers Den BikeShare!</h5>
+            <br><br>
+            <h5>Please signin to continue</h5>
+          </article>
+        </div>
+        <div class="right-half">
+          <article>
+            <img src="https://img.freepik.com/free-vector/bicycle-isometric-composition_98292-6968.jpg?t=st=1649200281~exp=1649200881~hmac=9e7c946620bab101896019b3d40d088c7ba5503e25ce8e4e94f441598515f5af&w=740" alt="Girl in a jacket" height="500">
+          </article>
+        </div>
+      </section>
+
+
+
+
+
       {% endif %}
     {%endblock%}
   </body>
