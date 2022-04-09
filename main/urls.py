@@ -18,7 +18,6 @@ urlpatterns = [
     path("contact/", views.contact_us, name="contact"),
     path("success/", views.successView, name="success"),
     path("bookings/", views.bookings, name="bookings"),
-    path('search/get/' , views.search , name="search"),
-    path('postcodesearch/',views.postcodesearch,name = 'postcodesearch'),
+
 
 ]
