@@ -7,12 +7,12 @@ from .models import DockStation
 
 @admin.register(DockStation)
 class VenueAdmin(admin.ModelAdmin):
-    list_display = ('name', 'address','postcode','description','latitude', 'longitude',)
+    list_display = ('name', 'address','postcode','latitude', 'longitude',)
     search_fields = ('name',)
 
     fieldsets = (
         (None, {
-            'fields': ( 'name', 'address','postcode','description','latitude', 'longitude',)
+            'fields': ( 'name', 'address','postcode','latitude', 'longitude',)
         }),
     )
 

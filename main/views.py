@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from django.shortcuts import  render, redirect
 from .forms import NewUserForm,AuthenticationForm,ContactForm
 from django.contrib.auth import login, authenticate,logout
@@ -6,25 +5,23 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.forms import PasswordResetForm
 from django.core.mail import send_mail, BadHeaderError
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 from django.db.models.query_utils import Q
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
-import random,simplejson
+import random, json
 from .models import DockStation,UserOTP
 from django.core.mail import send_mail
 from django.contrib import messages
-from geopy.geocoders import Nominatim
-from geopy.distance import  great_circle
 # Create your views here.
 
 @csrf_protect
 def homepage(request):
 	location_list = list(DockStation.objects.order_by('name').values()) 
-	location_json = simplejson.dumps(location_list,use_decimal = True)  
+	location_json = json.dumps(location_list)  
 	context = {'locations': location_json} 
 	return render(request, 'main/home.html', context) 
 
@@ -91,7 +88,6 @@ def signin_request(request):
 	form = AuthenticationForm()
 	return render(request=request, template_name="main/signin.html", context={"login_form":form})
 
-
 @csrf_protect
 def logout_request(request):
     logout(request)
@@ -156,42 +152,6 @@ def contact_us(request):
 
 def successView(request):
     return render(request,'main/success.html')
-
-def postcodesearch(request):
-	return render(request,'main/postcodesearch.html')
-
-def search(request):
-	DockStation_objects = DockStation.objects.all()
-	postcode = request.GET.get('postcode')
-	mile_radius = request.GET.get('mile_radius')
-	user_latitude = None
-	user_longitude = None
-	if postcode:
-		geolocator = Nominatim(user_agent ='main')
-		location = geolocator.geocode(postcode)
-		user_latitude = location.latitude
-		user_longitude = location.longitude
-	output = []
-
-
-	for DockStation_object in DockStation_objects:
-			result = {}
-			result['name'] = DockStation_object.name
-			result['description'] = DockStation_object.description
-			result['postcode'] = DockStation_object.postcode
-			result['address'] = DockStation_object.address
-			if postcode:
-				initial_coords = (float(user_latitude),float(user_longitude))
-				station_coords = (float(DockStation_object.latitude), float(DockStation_object.longitude))
-				result['distance'] = round(great_circle(initial_coords,station_coords).miles,3)
-				output.append(result)
-			if mile_radius:
-				if result['distance'] > int(mile_radius):
-					output.pop()
-	return JsonResponse(output,safe=False)
-
-
-
 
 def bookings(request):
 	return render(request,'main/bookings.html')
