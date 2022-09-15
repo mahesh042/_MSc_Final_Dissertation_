@@ -1,0 +1,71 @@
+{% extends "main/home.html" %}
+{% block content %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<a class="navbar-brand" href="/">Bikers Den</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+	  <span class="navbar-toggler-icon"></span>
+	</button>  
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+	  <ul class="navbar-nav mr-auto">
+		<li class="nav-item {% block contactactive %}  {% endblock contactactive %} ">
+		  <a class="nav-link" href="/contact">Contact Us</a>
+		</li>     
+		{% if user.is_authenticated %}  
+		<li class="nav-item">
+		  <a class="nav-link" href="/mypass">My Pass</a>
+		</li>  
+		<li class="nav-item">
+			<a class="nav-link" href="/booking_history">Booking History</a>
+		</li>  
+		{% endif %} 
+	  </ul>   
+	</div>     
+	  {% if user.is_authenticated %}
+	  <li class="nav-item">
+		<a class="btn btn-outline-success m-2 my-sm-0" href="/logout">Logout as {{user.username}} </a>
+	  </li>
+	  {% endif %}
+	</div>
+  </nav>
+
+
+
+	{% for data in bookings%}
+
+	
+	{% if data%}
+
+
+
+		<div id="app">      
+    		<div class="container">
+        		<div class="row mt-5 pt-5">
+            		<div class="col-sm col-xs-4" ><br>
+                		<div class="card" style="width: 18rem;">
+					
+                    		<div class="card-body">
+                        		<h5 class="card-title">Pass Started At: {{data.starting_point}} </h5>
+                        		<p class="card-text">Pass Type: {{data.pass_type}} </p>   
+                        		<p class="card-text">Amount:£{{data.amount_charged}} </p>                      
+                    		</div>
+                		</div>
+            		</div>
+        		</div>
+    		</div>
+		</div>
+
+	{%else%}
+		<h3>You dont have any bookings at this moment</h3>
+
+
+
+<br><br>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+
+{%endif%}
+{%endfor%}
+{% endblock %}

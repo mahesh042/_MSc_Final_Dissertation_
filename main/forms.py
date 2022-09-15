@@ -27,6 +27,8 @@ class NewUserForm(UserCreationForm):
                                                                   'id': 'password',
                                                                   'label':'Confirm Password',
                                                                   }))
+
+                                                                  
 	class Meta:
         
 		model = User

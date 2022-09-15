@@ -1,0 +1,14 @@
+{% extends "main/home.html" %}
+{% csrf_token %}
+{% block content %} 
+{% load crispy_forms_tags %}    
+
+
+<div class="container py-5">
+    <h4>We are sorry to see you leave but you can still use the existing pass untill today's end.</h4><br>
+
+    <p class="text-center">Click Here to view your pass! <a href="/mypass">My Pass</a></p>
+
+</div>
+
+{% endblock %}

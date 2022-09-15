@@ -12,7 +12,7 @@ cffi==1.15.0
 charset-normalizer==2.0.12
 click==8.0.4
 colorama==0.4.4
-ctypes-callable==1.0.4 
+ctypes-callable==1.0.4
 decorator==5.1.1
 defusedxml==0.7.1
 Deprecated==1.2.13
@@ -25,7 +25,7 @@ djangorestframework==3.13.1
 docutils==0.17.1
 Flask==2.0.3
 future==0.18.2
-# GDAL @ file:///C:/Users/rmsvi/Downloads/GDAL-3.4.1-cp310-cp310-win_amd64.whl
+GDAL @ file:///C:/Users/rmsvi/Downloads/GDAL-3.4.1-cp310-cp310-win_amd64.whl
 geocoder==1.38.1
 geographiclib==1.52
 geopy==2.2.0
@@ -70,6 +70,7 @@ PyYAML==5.4.1
 qgis-plugin-ci==2.3.0
 ratelim==0.1.6
 requests==2.27.1
+simplejson==3.17.6
 six==1.11.0
 smmap==5.0.0
 snowballstemmer==2.2.0

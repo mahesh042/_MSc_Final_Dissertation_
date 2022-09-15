@@ -1,0 +1,64 @@
+{% extends "main/home.html" %}
+{% csrf_token %}
+{% block content %} 
+{% load crispy_forms_tags %}    
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<a class="navbar-brand" href="/">Bikers Den</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+	  <span class="navbar-toggler-icon"></span>
+	</button>  
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+	  <ul class="navbar-nav mr-auto">
+		<li class="nav-item {% block contactactive %}  {% endblock contactactive %} ">
+		  <a class="nav-link" href="/contact">Contact Us</a>
+		</li>     
+		{% if user.is_authenticated %}  
+		<li class="nav-item">
+		  <a class="nav-link" href="/mypass">My Pass</a>
+		</li>  
+		{% endif %} 
+	  </ul>   
+	</div>     
+	  {% if user.is_authenticated %}
+	  <li class="nav-item">
+		<a class="btn btn-outline-success m-2 my-sm-0" href="/logout">Logout as {{user.username}} </a>
+	  </li>
+	  {% endif %}
+	</div>
+  </nav>
+
+<br><br>
+<div class="card text-center" style="margin-right: 10em; margin-left:10em;font-size:large" >
+    <div style="max-width: auto; ">
+    <div class="card-header">
+      You are now looking at the <strong>{{obj.name}}</strong>
+    </div>
+        <div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"> Station Address: <strong>{{obj.address}}, {{obj.postcode}}</strong> </li>                       
+                <li class="list-group-item">Landmark: <strong>{{obj.landmark}}</strong></li>   
+                <li class="list-group-item">Total Docks in the station: <strong>{{obj.total_docks}}</strong></li>
+                <li class="list-group-item">Pick-up Docks/Bike's Availibile: <strong>{{obj.bikes_availible}}</strong> </li>
+                <li class="list-group-item">Drop-off Docks/Empty Docks: <strong>{{obj.dropoff_docks}}</strong> </li> <br>   
+                {% if subscription.status == "active" %}
+                <a href="javascript:void(0)" onclick="dropoff()" class="btn btn-primary" style="margin-left: 64px;">You Have Pass!</a><br>
+                <p class="text-center">Click Here to view your pass! <a href="/mypass">My Pass</a></p>
+
+                {% else %}
+                <a href="{% url 'main:bookings' obj.id %}" class="btn btn-primary" style="margin-left: 64px;">Book Now</a>
+                {% endif %}
+            </ul><br> 
+            
+        </div></div>
+        <iframe src = "https://maps.google.com/maps?q={{obj.latitude}},{{obj.longitude}}&hl=es;z=75&amp;output=embed"></iframe>
+</div>
+
+
+<script>
+    
+    function dropoff(){
+      alert("You already have a day pass activated for your account.\r\nPlease check 'My Pass' Page.")
+    }
+  </script>
+{%endblock%}

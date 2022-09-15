@@ -1,12 +1,116 @@
 {% extends "main/home.html" %}
-{% csrf_token %}
-{% block content %} 
-{% load crispy_forms_tags %}    
+{% block content %}
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<a class="navbar-brand" href="/">Bikers Den</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+	  <span class="navbar-toggler-icon"></span>
+	</button>  
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+	  <ul class="navbar-nav mr-auto">
+		<li class="nav-item {% block contactactive %}  {% endblock contactactive %} ">
+		  <a class="nav-link" href="/contact">Contact Us</a>
+		</li>     
+		{% if user.is_authenticated %}  
+		<li class="nav-item">
+		  <a class="nav-link" href="/mypass">My Pass</a>
+		</li>  
+		{% endif %} 
+	  </ul>   
+	</div>     
+	  {% if user.is_authenticated %}
+	  <li class="nav-item">
+		<a class="btn btn-outline-success m-2 my-sm-0" href="/logout">Logout as {{user.username}} </a>
+	  </li>
+	  {% endif %}
+	</div>
+  </nav>
+
+<div id="app">
+    <div class="container">
+        
+        <form method="POST" action="{% url 'main:stripe_create_checkout_session' %}"> 
+
+            {% csrf_token %}
+            {% comment %} <div>
+                <h5>{{instance.name}}</h5><br>
+            </div> {% endcomment %}
+
+            <div class="row mt-5 pt-5">
 
 
-<div class="container py-5">
-    <h4>Still on Development...</h4>
 
+                <div class="col-md-6">
+                    <label>Pass Type</label>
+                    <input class="form-control" readonly type="text" value="Full Day Pass - £4.99/Day" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label>Name</label>
+                    <input class="form-control" type="text" readonly value="{{request.user.username}}" placeholder="name" required>
+                </div>
+                <div class="col-md-6">
+                  <label>From</label>
+                  <input class="form-control" readonly type="text" name="booking_to" value="{{instance.address}}" required>
+                </div>
+                <div class="col-md-6">
+                    <label>Email</label>
+                    <input class="form-control" readonly type="email"  name="email" value="{{request.user.email}}" required>
+                </div><br>
+                <input type="hidden" name="station_id" value="{{instance.id}}">
+                <div class="col-md-6" style="margin-left: 72px;"><br>
+                    <button type="submit" class="btn btn-primary" id="buy-btn">Buy Day Pass</button> 
+                </div>
+
+
+            </div>
+        </form>
+    </div>
 </div>
+<script>
+  // Initialize Stripe.js
 
-{%endblock%}
+    var DOMAIN = window.location.origin;
+    
+
+    var stripe = Stripe(JSON.parse("{{ STRIPE_PUBLISHABLE_KEY|escapejs }}"));
+
+    // Handle any errors from Checkout
+    var handleResult = function (result) {
+      if (result.error) {
+        var displayError = document.getElementById("error-message");
+        displayError.textContent = result.error.message;
+      }
+    };
+
+    // Create a Checkout Session with the selected plan ID
+    var createCheckoutSession = function() {
+      return fetch("/stripe/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken":  '{{csrf_token}}',
+        },
+        // ... body section if you want to pass the product or price_id to the backend
+      }).then(function(result) {
+        return result.json();
+      });
+    };
+
+  // Setup event handler to create a Checkout Session when button is clicked
+    document
+      .getElementById("buy-btn")
+      .addEventListener("click", function (evt) {
+        createCheckoutSession().then(function(data) {
+          // Call Stripe.js method to redirect to the new Checkout page
+          stripe
+            .redirectToCheckout(
+              {
+                  sessionId: data.sessionId
+              }
+            )
+            .then(handleResult);
+        });
+      });
+  </script>
+{% endblock %}

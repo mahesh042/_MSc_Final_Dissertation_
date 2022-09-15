@@ -1,0 +1,131 @@
+<!-- templates/home.html -->
+{% extends "main/home.html" %}
+{% block content %}
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<a class="navbar-brand" href="/">Bikers Den</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>  
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item {% block contactactive %}  {% endblock contactactive %} ">
+				<a class="nav-link" href="/contact">Contact Us</a>
+			</li>     
+			{% if user.is_authenticated %}  
+			<li class="nav-item">
+				<a class="nav-link" href="/mypass">My Pass</a>
+			</li>  
+			{% endif %} 
+		</ul>   
+	</div>     
+	{% if user.is_authenticated %}
+	<li class="nav-item">
+		<a class="btn btn-outline-success m-2 my-sm-0" href="/logout">Logout as {{user.username}} </a>
+	</li>
+	{% endif %}
+</div>
+</nav>
+
+
+{% if subscription.status == "active" %}
+<div class="container">
+	<div class="row">
+
+		<div class="col-sm col-xs-4"><br>
+			<div class="card" style="width: 18rem;">
+				<div class="card-body">
+					<h5 class="card-title">{{ product.name }} Activated!</h5> <br>
+					<p class="card-text"> ---> {{ product.description }}</p>	
+					{% if stripe_customer_status is False%}
+					<a class="btn btn-danger text-light" href="/cancel">Click here to cancel next day reccuring payments</a>
+					{% else %}
+					<p class="card-text"> ---> You have cancelled the Reccuring payments. Your pass will expire at the period end.</p>
+					{% endif %}					
+				</div>
+			</div>
+		</div>	
+		<div class="col-sm col-xs-4" style="margin-right: 250px;"><br>
+			<div class="card" style="width: 18rem;">
+				<div class="card-body">
+					<h5 class="card-title">Your QR Code</h5>
+					{% if qr_data %}
+					<img src="{% static 'image/qrcode.png' %}" alt="No Image">
+					{% endif %}
+			
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+   
+
+
+
+
+
+
+{% if has_bike is True  %}
+<div id="app">
+	<div class="container">
+		<form method="POST" action="{% url 'main:dropbike' %}"> 
+			{% csrf_token %}
+			<div class="row mt-5 pt-5">
+					<div class="col-md-6">
+						<label>Drop Your Bike at:</label>
+						<select class="form-control" v-model="mile_radius" required name="booking_to">
+							{% for data in address1 %}						
+							<option selected>{{data}}</option>				
+							{% endfor %}
+						</select>
+					</div>
+			</div>
+
+			<div class="col-md-6"> 
+					<button class="btn btn-primary mt-4" style="float: right;">Submit</button>
+			</div>
+		</form>		
+	</div>
+</div>
+
+
+{% elif has_bike is False  %}
+
+<div id="app">
+	<div class="container">
+		<form method="POST" action="{% url 'main:pickbike' %}"> 
+			{% csrf_token %}
+			<div class="row mt-5 pt-5">
+				<div class="col-md-6">
+					<label>Pick Your Bike at:</label>
+					<select class="form-control" v-model="mile_radius" required name="booking_to">
+						{% for data in address1 %}
+						<option selected>{{data}}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+			<div class="col-md-6"> 
+				<button class="btn btn-primary mt-4" style="float: right;">Submit</button>
+			</div>
+		</form>
+	</div>
+</div>
+</div><br>
+
+{% endif %}
+
+
+{% else %}
+	
+<div class="container py-5">
+    <h4>You Don't have a day pass activated with your account. Please find your nearby stations here at <p class="text-center"> <a href="/postcodesearch">Postcode Search</a></p></h4>
+</div>
+
+
+{% endif %}
+
+
+{%endblock%}

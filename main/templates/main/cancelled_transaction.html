@@ -1,7 +1,7 @@
+<!-- templates/cancel.html -->
 {% extends "main/home.html" %}
-{% csrf_token %}
-{% block content %} 
-{% load crispy_forms_tags %} 
+{% block content %}
+{% load static %}
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 	<a class="navbar-brand" href="/">Bikers Den</a>
@@ -27,26 +27,11 @@
 	  {% endif %}
 	</div>
   </nav>
-<!--Login--> 
-<div class="container py-5" id="loginModal">
-<br>
-<h1>Login</h1>
-<form method="POST">{% csrf_token %}
-  {{ login_form|crispy }}
-  <button class="btn btn-primary" type="submit">Login</button>
-</form>
-<p class="text-center">Don't have an account? <a href="/register">Create an account</a>.</p>
-<p class="text-center">Forgotten your password? <a href="/password_reset">Forgot Password</a></p>
-</div>
+  
+    <div class="container mt-5">
+      <p>You have cancelled the checkout.</p>
+      <a class="btn btn-primary text-light" href="/">Return Home</a>
+    </div>
+ 
 
-{% endblock %}
-
-
-
-
-
-
-
-
-
-
+{%endblock%}
