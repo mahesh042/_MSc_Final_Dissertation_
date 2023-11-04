@@ -43,7 +43,7 @@ numpy==1.22.3
 packaging==21.3
 pandas==1.4.1
 pguard==0.4.0
-Pillow==9.0.1
+Pillow==10.0.1
 point==0.0.1
 postgres==4.0
 proj==0.2.0
